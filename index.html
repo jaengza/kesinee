@@ -206,16 +206,27 @@ tbody tr.blw td{color:var(--tx3);}
   body, html {
     background: #ffffff !important;
     color: #0d1117 !important;
+    font-size: 14px;
+    line-height: 1.5;
   }
+  
+  /* Print Header styling */
   .print-header {
     display: flex !important;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 2px solid #d0d7de !important;
-    padding-bottom: 10px;
-    margin-bottom: 20px;
+    border-bottom: 3px solid #0969da !important;
+    padding-bottom: 8px;
+    margin-bottom: 25px;
     color: #0d1117 !important;
   }
+  .print-header span:first-child {
+    font-weight: 700 !important;
+    font-size: 20px !important;
+    color: #0969da !important;
+  }
+  
+  /* Layout reset for print */
   .hdr-inp, .footer, .card-data-mgmt {
     display: none !important;
   }
@@ -223,26 +234,72 @@ tbody tr.blw td{color:var(--tx3);}
     display: block !important;
     padding: 0 !important;
     background: #ffffff !important;
+    width: 100% !important;
   }
+  
+  /* Cards formatting */
   .card {
     background: #ffffff !important;
     border: 1px solid #d0d7de !important;
+    border-radius: 12px !important;
     color: #0d1117 !important;
     box-shadow: none !important;
-    margin-bottom: 20px;
+    margin-bottom: 20px !important;
+    padding: 16px !important;
+    page-break-inside: avoid;
     break-inside: avoid;
-    padding: 14px !important;
   }
+  
   .ct {
     color: #57606a !important;
+    font-size: 12px !important;
+    margin-bottom: 8px !important;
   }
+  
   .bnum, .mnum, .sv, .sl, .lbl, .val, .slb {
     color: #0d1117 !important;
   }
+  
+  /* Grid formatting on page 1 */
+  .card-portfolio {
+    margin-bottom: 20px !important;
+  }
+  .card-stack-streak {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 12px !important;
+    border: none !important;
+    background: transparent !important;
+    padding: 0 !important;
+    margin-bottom: 20px !important;
+  }
+  .card-stack-streak .card {
+    margin-bottom: 0 !important;
+  }
+  
+  /* Stats panel inside print */
+  .card-stats {
+    display: grid !important;
+    grid-template-columns: repeat(6, 1fr) !important;
+    gap: 8px !important;
+    padding: 12px !important;
+    background: #ffffff !important;
+    border: 1px solid #d0d7de !important;
+    border-radius: 12px !important;
+  }
+  .card-stats .sb {
+    padding: 8px 4px !important;
+    background: #f6f8fa !important;
+    border: 1px solid #d0d7de !important;
+    border-radius: 8px !important;
+    margin: 0 !important;
+  }
+  
   .pb {
     background: #f6f8fa !important;
     border: 1px solid #d0d7de !important;
   }
+  
   .dot {
     background: #f6f8fa !important;
     border: 2px solid #d0d7de !important;
@@ -255,44 +312,90 @@ tbody tr.blw td{color:var(--tx3);}
     background: #bc4c00 !important;
     border-color: #bc4c00 !important;
   }
-  .sb {
-    background: #f6f8fa !important;
-    border: 1px solid #d0d7de !important;
+  
+  /* Force page break after chart so the detailed ladder/logs start on Page 2 */
+  .card-chart {
+    page-break-after: always;
+    break-after: always;
   }
-  /* Fix scrollbar cutoff for printing so all entries display */
+  
+  /* Page 2: Table / Log section */
+  .card-table-log {
+    border: none !important;
+    background: transparent !important;
+    padding: 0 !important;
+  }
+  
+  .tabs {
+    display: none !important; /* Hide tabs header in print */
+  }
+  
+  /* Show both containers, don't hide either! */
+  .tc {
+    display: block !important;
+    margin-bottom: 30px !important;
+    page-break-inside: auto !important;
+  }
+  
+  /* Table styling */
+  .tw {
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    border: 1px solid #d0d7de !important;
+    border-radius: 8px !important;
+  }
+  table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+  }
+  thead {
+    display: table-header-group !important; /* Repeat header on every page */
+  }
+  thead th {
+    background: #f6f8fa !important;
+    color: #57606a !important;
+    font-weight: 700 !important;
+    border-bottom: 2px solid #d0d7de !important;
+    padding: 8px 10px !important;
+    font-size: 12px !important;
+  }
+  tbody td {
+    padding: 8px 10px !important;
+    border-bottom: 1px solid #d0d7de !important;
+    font-size: 13px !important;
+  }
+  tbody tr:nth-child(even) {
+    background: #fafafa !important; /* Zebra striping */
+  }
+  tbody tr.cur td {
+    background: #dafbe1 !important;
+    color: #1a7f37 !important;
+    font-weight: 700 !important;
+  }
+  tbody tr.blw td {
+    color: #57606a !important;
+  }
+  
+  /* Log box formatting */
   .logbox {
     height: auto !important;
     max-height: none !important;
     overflow: visible !important;
     background: #f6f8fa !important;
     border: 1px solid #d0d7de !important;
-  }
-  .tw {
-    height: auto !important;
-    max-height: none !important;
-    overflow: visible !important;
-  }
-  table {
-    color: #0d1117 !important;
-  }
-  thead th {
-    background: #f6f8fa !important;
-    color: #57606a !important;
-    border-bottom: 2px solid #d0d7de !important;
-  }
-  tbody td {
-    border-bottom: 1px solid #d0d7de !important;
-  }
-  tbody tr.cur td {
-    background: #dafbe1 !important;
-    color: #1a7f37 !important;
-  }
-  tbody tr.blw td {
-    color: #57606a !important;
+    border-radius: 8px !important;
+    padding: 12px !important;
   }
   .le {
+    padding: 6px 0 !important;
     border-bottom: 1px solid #d0d7de !important;
+    font-size: 12px !important;
   }
+  .le:last-child {
+    border-bottom: none !important;
+  }
+  
   /* Ensure colors for win/loss are visible in PDF */
   .le.win {
     color: #1a7f37 !important;
