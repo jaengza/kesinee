@@ -701,11 +701,24 @@ function exportReportImage() {
       useCORS: true,
       logging: false
     }).then(canvas => {
-      const link = document.createElement('a');
-      link.download = `kesinnee_Trader_to_100K_Report_${new Date().toISOString().slice(0,10)}.png`;
-      link.href = canvas.toDataURL('image/png');
-      link.click();
-      lg('ส่งออกรูปภาพสำเร็จ! 🖼️', 'sys', S.w + S.l);
+      // iOS / iPad Safari native download compatibility using toBlob & DOM appending
+      canvas.toBlob(blob => {
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.download = `kesinnee_Trader_to_100K_Report_${new Date().toISOString().slice(0,10)}.png`;
+        link.href = url;
+        
+        // Safari on iOS requires the link to be in the DOM to trigger a download
+        document.body.appendChild(link);
+        link.click();
+        
+        setTimeout(() => {
+          document.body.removeChild(link);
+          URL.revokeObjectURL(url);
+        }, 200);
+        
+        lg('ส่งออกรูปภาพสำเร็จ! 🖼️', 'sys', S.w + S.l);
+      }, 'image/png');
     }).catch(err => {
       console.error('Error generating image:', err);
       lg('เกิดข้อผิดพลาดในการสร้างภาพ', 'warn', S.w + S.l);
@@ -724,8 +737,16 @@ function exportBackupJSON() {
   const link = document.createElement('a');
   link.download = `kesinnee_Trader_to_100K_Backup_${new Date().toISOString().slice(0,10)}.json`;
   link.href = url;
+  
+  // Safari on iOS requires the link to be in the DOM to trigger a download
+  document.body.appendChild(link);
   link.click();
-  URL.revokeObjectURL(url);
+  
+  setTimeout(() => {
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }, 200);
+  
   lg('ส่งออกไฟล์สำรองสำเร็จ! 💾', 'sys', S.w + S.l);
 }
 
