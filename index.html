@@ -495,10 +495,6 @@ tbody tr.blw td{color:var(--tx3);}
     grid-column: 1;
     grid-row: 3;
   }
-  .card-table-log {
-    grid-column: 2;
-    grid-row: 3;
-  }
   .ct {
     font-size: 13px;
   }
@@ -510,26 +506,17 @@ tbody tr.blw td{color:var(--tx3);}
   }
   .card-table-log {
     grid-column: 2;
-    grid-row: 3;
+    grid-row: 3 / span 2;
   }
   .card-data-mgmt {
     grid-column: 1;
     grid-row: 4;
   }
-  .ct {
-    font-size: 13px;
-  }
-  .bnum {
-    font-size: 42px;
-  }
-  .mnum {
-    font-size: 32px;
-  }
   .tw {
-    max-height: 280px;
+    max-height: 450px;
   }
   .logbox {
-    height: 280px;
+    height: 450px;
   }
 }
 
@@ -557,11 +544,17 @@ tbody tr.blw td{color:var(--tx3);}
   }
   .card-table-log {
     grid-column: 2;
-    grid-row: 3;
+    grid-row: 3 / span 2;
   }
   .card-data-mgmt {
     grid-column: 1;
     grid-row: 4;
+  }
+  .tw {
+    max-height: 370px;
+  }
+  .logbox {
+    height: 370px;
   }
 }
 </style>
@@ -656,7 +649,7 @@ tbody tr.blw td{color:var(--tx3);}
   <!-- TABLE / LOG -->
   <div class="card card-table-log">
     <div class="tabs">
-      <div class="tab on" onclick="swTab('t')">📋 Lot Ladder</div>
+      <div id="tabLotLadder" class="tab on" onclick="swTab('t')">📋 Lot Ladder</div>
       <div class="tab" onclick="swTab('l')">📝 Trade Log</div>
     </div>
     <div class="tc on" id="tcT">
@@ -778,6 +771,8 @@ function ui(){
   document.getElementById('eqD').className='bnum'+(S.eq<S.iE?' rd':'');
   document.getElementById('lotD').textContent=lot.toFixed(2);
   document.getElementById('lvD').textContent=`Level ${idx+1} / 100`;
+  const tabEl = document.getElementById('tabLotLadder');
+  if (tabEl) tabEl.textContent = `📋 Lot Ladder (Lv. ${idx+1})`;
   document.getElementById('totBal').textContent=`$${tot.toFixed(2)}`;
   document.getElementById('pipV').textContent=`$${p.toFixed(3)}`;
   document.getElementById('riskV').textContent=`$${(40*p).toFixed(2)}`;
@@ -812,7 +807,7 @@ function tb(){
     if(iC)st='<span style="color:var(--yl)">▶</span>';
     else if(iCo)st='<span style="color:var(--gn)">✅</span>';
     else if(iB)st='<span style="color:var(--or)">🔄</span>';
-    tr.innerHTML=`<td><span class="lvb" style="background:${tc[ti]}20;color:${tc[ti]}">${lv.n}</span></td><td>$${lv.e.toFixed(0)}</td><td style="color:var(--bl)">${lv.lot.toFixed(2)}</td><td style="color:var(--yl)">$${lv.d}</td><td style="color:var(--gn)">${done?'—':'$'+lv.s.toFixed(0)}</td><td>${st}</td>`;
+    tr.innerHTML=`<td><span class="lvb" style="background:${tc[ti]}20;color:${tc[ti]}">Lv. ${lv.n}</span></td><td>$${lv.e.toFixed(0)}</td><td style="color:var(--bl)">${lv.lot.toFixed(2)}</td><td style="color:var(--yl)">$${lv.d}</td><td style="color:var(--gn)">${done?'—':'$'+lv.s.toFixed(0)}</td><td>${st}</td>`;
     b.appendChild(tr);
   });
 }
