@@ -2,8 +2,12 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Micro Sniper Pro</title>
+<!-- Apple Web App Meta Tags -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Micro Sniper Pro">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap');
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
@@ -17,10 +21,23 @@
   --tx:#e6edf3;--tx2:#8b949e;--tx3:#6e7681;
 }
 html{background:var(--bg);}
-body{background:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;font-size:15px;padding-bottom:90px;}
+body {
+  background: var(--bg);
+  color: var(--tx);
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  padding-bottom: calc(90px + env(safe-area-inset-bottom));
+  padding-top: 0;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-overflow-scrolling: touch;
+}
+input, textarea {
+  -webkit-user-select: text;
+}
  
 /* HEADER */
-.hdr{background:var(--bg3);border-bottom:1px solid var(--bdr);padding:12px 16px;}
+.hdr{background:var(--bg3);border-bottom:1px solid var(--bdr);padding:calc(12px + env(safe-area-inset-top)) 16px 12px;}
 .hdr h1{font-size:16px;font-weight:700;color:var(--bl);}
 .hdr p{font-size:11px;color:var(--tx2);margin-top:2px;}
 .hdr-inp{display:flex;gap:8px;margin-top:10px;align-items:flex-end;}
@@ -103,7 +120,7 @@ tbody tr.blw td{color:var(--tx3);}
 .le.win{color:var(--gn);}.le.loss{color:var(--rd);}.le.sys{color:var(--bl);}.le.stack{color:var(--yl);}.le.warn{color:var(--or);}
  
 /* FIXED FOOTER */
-.footer{position:fixed;bottom:0;left:0;right:0;background:var(--bg3);border-top:2px solid var(--bdr);padding:10px 16px;display:flex;gap:10px;align-items:flex-end;z-index:100;}
+.footer{position:fixed;bottom:0;left:0;right:0;background:var(--bg3);border-top:2px solid var(--bdr);padding:10px 16px calc(10px + env(safe-area-inset-bottom));display:flex;gap:10px;align-items:flex-end;z-index:100;}
 .fp{display:flex;flex-direction:column;gap:4px;}
 .fp label{font-size:10px;color:var(--tx2);font-weight:500;}
 .fp input{background:var(--bg4);border:1px solid var(--bdr);color:var(--tx);padding:10px 8px;border-radius:8px;font-size:14px;font-family:'JetBrains Mono',monospace;width:80px;text-align:center;}
@@ -116,6 +133,100 @@ tbody tr.blw td{color:var(--tx3);}
 .tbr{background:var(--bg4);color:var(--tx2);border:1px solid var(--bdr);padding:16px 14px;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;}
  
 .c-g{color:var(--gn);}.c-b{color:var(--bl);}.c-y{color:var(--yl);}.c-r{color:var(--rd);}.c-p{color:var(--pu);}
+
+/* IPAD RESPONSIVE STYLES */
+@media (min-width: 768px) {
+  body {
+    font-size: 16px;
+  }
+  .hdr h1 {
+    font-size: 22px;
+  }
+  .hdr p {
+    font-size: 13px;
+  }
+  .hdr-inp {
+    margin-top: 14px;
+    gap: 12px;
+  }
+  .ig input {
+    padding: 12px 14px;
+    font-size: 16px;
+  }
+  .bst {
+    padding: 12px 24px;
+    font-size: 16px;
+  }
+  .content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    padding: 16px 24px;
+  }
+  .card-portfolio {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+  }
+  .card-stack-streak {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .card-stats {
+    grid-column: 2;
+    grid-row: 2;
+  }
+  .card-chart {
+    grid-column: 1;
+    grid-row: 3;
+  }
+  .card-table-log {
+    grid-column: 2;
+    grid-row: 3;
+  }
+  .ct {
+    font-size: 13px;
+  }
+  .bnum {
+    font-size: 42px;
+  }
+  .mnum {
+    font-size: 32px;
+  }
+  .tw {
+    max-height: 280px;
+  }
+  .logbox {
+    height: 280px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .content {
+    grid-template-columns: 380px 1fr;
+    gap: 20px;
+    padding: 20px 32px;
+  }
+  .card-portfolio {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+  }
+  .card-stack-streak {
+    grid-column: 1;
+    grid-row: 3;
+  }
+  .card-stats {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .card-chart {
+    grid-column: 2;
+    grid-row: 2;
+  }
+  .card-table-log {
+    grid-column: 2;
+    grid-row: 3;
+  }
+}
 </style>
 </head>
 <body>
@@ -134,7 +245,7 @@ tbody tr.blw td{color:var(--tx3);}
 <div class="content">
  
   <!-- PORTFOLIO -->
-  <div class="card">
+  <div class="card card-portfolio">
     <div class="ct">📊 สถานะพอร์ต</div>
     <div class="slb">Trading Equity</div>
     <div class="bnum" id="eqD">$20.00</div>
@@ -151,7 +262,7 @@ tbody tr.blw td{color:var(--tx3);}
   </div>
  
   <!-- STACK + STREAK -->
-  <div class="g2">
+  <div class="g2 card-stack-streak">
     <div class="card">
       <div class="ct">🏦 Stack</div>
       <div class="slb">Stack (ห้ามแตะ)</div>
@@ -177,7 +288,7 @@ tbody tr.blw td{color:var(--tx3);}
   </div>
  
   <!-- STATS -->
-  <div class="stats">
+  <div class="stats card-stats">
     <div class="sb"><div class="lbl">Trades</div><div class="val c-b" id="sTr">0</div></div>
     <div class="sb"><div class="lbl">Win Rate</div><div class="val c-g" id="sWR">-</div></div>
     <div class="sb"><div class="lbl">Net PnL</div><div class="val" id="sPL">$0</div></div>
@@ -187,13 +298,13 @@ tbody tr.blw td{color:var(--tx3);}
   </div>
  
   <!-- CHART -->
-  <div class="card">
+  <div class="card card-chart">
     <div class="ct">📈 Equity Curve &nbsp;<span style="color:var(--gn);font-size:10px;">━ Equity</span> &nbsp;<span style="color:var(--yl);font-size:10px;">━ Wealth</span></div>
     <canvas id="cv" height="180"></canvas>
   </div>
  
   <!-- TABLE / LOG -->
-  <div class="card">
+  <div class="card card-table-log">
     <div class="tabs">
       <div class="tab on" onclick="swTab('t')">📋 Lot Ladder</div>
       <div class="tab" onclick="swTab('l')">📝 Trade Log</div>
@@ -336,7 +447,8 @@ function tb(){
  
 function ch(){
   const cv=document.getElementById('cv');
-  const W=cv.parentElement.clientWidth-28,H=180;
+  const W=cv.parentElement.clientWidth-28;
+  const H=W > 600 ? 220 : 180;
   cv.width=W;cv.height=H;
   const ctx=cv.getContext('2d');
   const eq=S.hE,wl=S.hW;
