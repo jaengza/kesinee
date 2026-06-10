@@ -8,6 +8,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Micro Sniper Pro">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap');
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
@@ -134,6 +135,78 @@ tbody tr.blw td{color:var(--tx3);}
  
 .c-g{color:var(--gn);}.c-b{color:var(--bl);}.c-y{color:var(--yl);}.c-r{color:var(--rd);}.c-p{color:var(--pu);}
 
+/* DATA MANAGEMENT CARD */
+.card-data-mgmt {
+  background: var(--bg3);
+}
+.dm-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 10px;
+}
+.dmb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 8px;
+  border-radius: 8px;
+  border: 1px solid var(--bdr);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  background: var(--bg4);
+  color: var(--tx);
+  transition: all 0.1s;
+}
+.dmb:active {
+  transform: scale(0.96);
+}
+.dmb-save {
+  border-color: var(--bl);
+  color: var(--bl);
+  background: var(--bl3);
+}
+.dmb-export-img {
+  border-color: var(--pu);
+  color: var(--pu);
+  background: #1a0a1a;
+}
+.dmb-print {
+  border-color: var(--yl);
+  color: var(--yl);
+  background: var(--yl3);
+}
+.dmb-import {
+  border-color: var(--gn);
+  color: var(--gn);
+  background: var(--gn3);
+}
+.dmb-backup {
+  border-color: var(--bl);
+  color: var(--bl);
+  background: var(--bl3);
+}
+.dmb-reset {
+  border-color: var(--rd);
+  color: var(--rd);
+  background: var(--rd3);
+}
+
+@media print {
+  .hdr-inp, .footer, .card-data-mgmt {
+    display: none !important;
+  }
+  .content {
+    display: block !important;
+    padding: 0 !important;
+  }
+  body {
+    padding-bottom: 0 !important;
+  }
+}
+
 /* IPAD RESPONSIVE STYLES */
 @media (min-width: 768px) {
   body {
@@ -192,6 +265,23 @@ tbody tr.blw td{color:var(--tx3);}
   .mnum {
     font-size: 32px;
   }
+  .card-table-log {
+    grid-column: 2;
+    grid-row: 3;
+  }
+  .card-data-mgmt {
+    grid-column: 1;
+    grid-row: 4;
+  }
+  .ct {
+    font-size: 13px;
+  }
+  .bnum {
+    font-size: 42px;
+  }
+  .mnum {
+    font-size: 32px;
+  }
   .tw {
     max-height: 280px;
   }
@@ -225,6 +315,10 @@ tbody tr.blw td{color:var(--tx3);}
   .card-table-log {
     grid-column: 2;
     grid-row: 3;
+  }
+  .card-data-mgmt {
+    grid-column: 1;
+    grid-row: 4;
   }
 }
 </style>
@@ -317,6 +411,19 @@ tbody tr.blw td{color:var(--tx3);}
     </div>
     <div class="tc" id="tcL">
       <div class="logbox" id="logB"><div class="le sys">[INIT] Ready</div></div>
+    </div>
+  </div>
+ 
+  <!-- DATA MANAGEMENT -->
+  <div class="card card-data-mgmt">
+    <div class="ct">🛠️ จัดการข้อมูล & รายงาน</div>
+    <div class="dm-grid">
+      <button class="dmb dmb-save" onclick="saveSetupClick()">💾 บันทึกข้อมูลพอร์ต</button>
+      <button class="dmb dmb-export-img" onclick="exportReportImage()">🖼️ ส่งออกเป็นรูปภาพ</button>
+      <button class="dmb dmb-print" onclick="window.print()">📄 พิมพ์รายงาน / PDF</button>
+      <button class="dmb dmb-import" onclick="importBackupJSON()">📥 นำเข้าไฟล์สำรอง</button>
+      <button class="dmb dmb-backup" onclick="exportBackupJSON()">📤 สำรองไฟล์ข้อมูล</button>
+      <button class="dmb dmb-reset" onclick="resetAll()">🔄 รีเซ็ตข้อมูลทั้งหมด</button>
     </div>
   </div>
  
@@ -529,6 +636,73 @@ function loadState() {
 function saveSetupClick() {
   saveState();
   shA('save');
+}
+
+function exportReportImage() {
+  const content = document.querySelector('.content');
+  lg('กำลังเตรียมสร้างภาพรายงาน...', 'sys', S.w + S.l);
+  shA('save');
+  
+  setTimeout(() => {
+    html2canvas(content, {
+      backgroundColor: '#070b14',
+      scale: 2,
+      useCORS: true,
+      logging: false
+    }).then(canvas => {
+      const link = document.createElement('a');
+      link.download = `Micro_Sniper_Pro_Report_${new Date().toISOString().slice(0,10)}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      lg('ส่งออกรูปภาพสำเร็จ! 🖼️', 'sys', S.w + S.l);
+    }).catch(err => {
+      console.error('Error generating image:', err);
+      lg('เกิดข้อผิดพลาดในการสร้างภาพ', 'warn', S.w + S.l);
+    });
+  }, 100);
+}
+
+function exportBackupJSON() {
+  const dataStr = localStorage.getItem('micro_sniper_pro_state');
+  if (!dataStr) {
+    lg('ไม่มีข้อมูลสำรองให้ส่งออก', 'warn', S.w + S.l);
+    return;
+  }
+  const blob = new Blob([dataStr], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.download = `Micro_Sniper_Pro_Backup_${new Date().toISOString().slice(0,10)}.json`;
+  link.href = url;
+  link.click();
+  URL.revokeObjectURL(url);
+  lg('ส่งออกไฟล์สำรองสำเร็จ! 💾', 'sys', S.w + S.l);
+}
+
+function importBackupJSON() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.json';
+  input.onchange = e => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = event => {
+      try {
+        const parsed = JSON.parse(event.target.result);
+        if (parsed && typeof parsed.eq === 'number') {
+          localStorage.setItem('micro_sniper_pro_state', event.target.result);
+          loadState();
+          lg('นำเข้าข้อมูลสำรองสำเร็จ! 🔄', 'sys', S.w + S.l);
+          shA('save');
+        } else {
+          lg('รูปแบบไฟล์สำรองไม่ถูกต้อง', 'warn', S.w + S.l);
+        }
+      } catch (err) {
+        lg('เกิดข้อผิดพลาดในการอ่านไฟล์', 'warn', S.w + S.l);
+      }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
 }
 
 const loaded = loadState();
