@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Micro Sniper Pro</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+:root{
+  --bg:#070b14;--bg2:#0d1117;--bg3:#161b22;--bg4:#21262d;--bdr:#30363d;
+  --gn:#3fb950;--gn2:#238636;--gn3:#0d2016;
+  --bl:#58a6ff;--bl2:#1f6feb;--bl3:#0d1a30;
+  --yl:#d29922;--yl3:#1a1200;
+  --rd:#f85149;--rd2:#da3633;--rd3:#3a1a1a;
+  --pu:#bc8cff;--or:#f0883e;
+  --tx:#e6edf3;--tx2:#8b949e;--tx3:#6e7681;
+}
+html{background:var(--bg);}
+body{background:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;font-size:15px;padding-bottom:90px;}
+ 
+/* HEADER */
+.hdr{background:var(--bg3);border-bottom:1px solid var(--bdr);padding:12px 16px;}
+.hdr h1{font-size:16px;font-weight:700;color:var(--bl);}
+.hdr p{font-size:11px;color:var(--tx2);margin-top:2px;}
+.hdr-inp{display:flex;gap:8px;margin-top:10px;align-items:flex-end;}
+.ig{flex:1;}
+.ig label{font-size:11px;color:var(--tx2);display:block;margin-bottom:4px;font-weight:500;}
+.ig input{width:100%;background:var(--bg4);border:1px solid var(--bdr);color:var(--tx);padding:10px 12px;border-radius:8px;font-size:15px;font-family:'JetBrains Mono',monospace;text-align:center;}
+.ig input:focus{outline:none;border-color:var(--bl);}
+.bst{background:var(--bl2);color:#fff;border:none;padding:10px 18px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap;align-self:flex-end;}
+ 
+/* CONTENT */
+.content{padding:12px 16px;display:flex;flex-direction:column;gap:10px;}
+ 
+/* CARD */
+.card{background:var(--bg3);border:1px solid var(--bdr);border-radius:12px;padding:14px;}
+.ct{font-size:11px;color:var(--tx2);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:10px;}
+ 
+/* NUMBERS */
+.bnum{font-size:36px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--gn);line-height:1;}
+.bnum.rd{color:var(--rd);}
+.mnum{font-size:26px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--bl);}
+.slb{font-size:11px;color:var(--tx2);margin-bottom:3px;font-weight:500;}
+ 
+.sr{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--bg4);}
+.sr:last-child{border-bottom:none;}
+.sl{font-size:12px;color:var(--tx2);}
+.sv{font-size:13px;font-weight:700;font-family:'JetBrains Mono',monospace;}
+ 
+.pb{background:var(--bg4);border-radius:4px;height:7px;margin:6px 0 4px;}
+.pf{height:7px;border-radius:4px;transition:width .3s;}
+.pg{background:linear-gradient(90deg,var(--gn2),var(--gn));}
+.py{background:linear-gradient(90deg,#9e6a03,var(--yl));}
+ 
+/* GRID 2 */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+ 
+/* STREAK DOTS */
+.dots{display:flex;gap:12px;margin:10px 0 8px;}
+.dot{width:32px;height:32px;border-radius:50%;border:2px solid var(--bdr);background:var(--bg4);transition:all .2s;}
+.dot.loss{background:var(--rd);border-color:var(--rd);box-shadow:0 0 12px rgba(248,81,73,.5);}
+.dot.warn{background:var(--or);border-color:var(--or);}
+ 
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.sb{background:var(--bg4);border-radius:10px;padding:12px 8px;text-align:center;}
+.sb .lbl{font-size:10px;color:var(--tx2);margin-bottom:5px;}
+.sb .val{font-size:20px;font-weight:700;font-family:'JetBrains Mono',monospace;}
+ 
+/* ALERTS */
+.al{border-radius:8px;padding:10px 12px;font-size:13px;margin-top:8px;display:none;font-weight:600;}
+.al-d{background:var(--rd3);border:1px solid var(--rd);color:var(--rd);}
+.al-s{background:var(--yl3);border:1px solid var(--yl);color:var(--yl);}
+.al-ok{background:var(--gn3);border:1px solid var(--gn);color:var(--gn);}
+.al-r{background:#1a0f00;border:1px solid var(--or);color:var(--or);}
+.al-sk{background:#1a0a1a;border:1px solid var(--pu);color:var(--pu);}
+ 
+/* CANVAS */
+canvas{display:block;width:100%;border-radius:6px;}
+ 
+/* TABS */
+.tabs{display:flex;gap:6px;margin-bottom:10px;}
+.tab{flex:1;padding:8px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--bdr);background:var(--bg4);color:var(--tx2);text-align:center;}
+.tab.on{background:var(--bl3);border-color:var(--bl);color:var(--bl);}
+.tc{display:none;}.tc.on{display:block;}
+ 
+/* TABLE */
+.tw{max-height:220px;overflow-y:auto;border-radius:6px;border:1px solid var(--bdr);}
+.tw::-webkit-scrollbar{width:3px;}
+.tw::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:3px;}
+table{width:100%;border-collapse:collapse;}
+thead th{background:var(--bg4);color:var(--tx2);font-size:11px;padding:8px 6px;text-align:left;position:sticky;top:0;font-weight:700;}
+tbody td{padding:6px;border-bottom:1px solid var(--bg4);font-size:12px;font-family:'JetBrains Mono',monospace;}
+tbody tr.cur td{background:#1f3a1f;color:var(--gn);font-weight:700;}
+tbody tr.blw td{color:var(--tx3);}
+.lvb{display:inline-block;padding:2px 6px;border-radius:4px;font-size:11px;font-weight:700;}
+ 
+/* LOG */
+.logbox{background:var(--bg2);border:1px solid var(--bdr);border-radius:6px;padding:8px;height:220px;overflow-y:auto;font-family:'JetBrains Mono',monospace;font-size:11px;}
+.logbox::-webkit-scrollbar{display:none;}
+.le{padding:3px 0;border-bottom:1px solid var(--bg3);}
+.le.win{color:var(--gn);}.le.loss{color:var(--rd);}.le.sys{color:var(--bl);}.le.stack{color:var(--yl);}.le.warn{color:var(--or);}
+ 
+/* FIXED FOOTER */
+.footer{position:fixed;bottom:0;left:0;right:0;background:var(--bg3);border-top:2px solid var(--bdr);padding:10px 16px;display:flex;gap:10px;align-items:flex-end;z-index:100;}
+.fp{display:flex;flex-direction:column;gap:4px;}
+.fp label{font-size:10px;color:var(--tx2);font-weight:500;}
+.fp input{background:var(--bg4);border:1px solid var(--bdr);color:var(--tx);padding:10px 8px;border-radius:8px;font-size:14px;font-family:'JetBrains Mono',monospace;width:80px;text-align:center;}
+.fp input:focus{outline:none;border-color:var(--bl);}
+.tbtns{display:flex;gap:10px;flex:1;}
+.tb{flex:1;padding:16px 0;border-radius:12px;border:none;font-size:17px;font-weight:700;cursor:pointer;transition:transform .1s;}
+.tb:active{transform:scale(.96);}
+.tbw{background:var(--gn2);color:#fff;}
+.tbl{background:var(--rd2);color:#fff;}
+.tbr{background:var(--bg4);color:var(--tx2);border:1px solid var(--bdr);padding:16px 14px;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;}
+ 
+.c-g{color:var(--gn);}.c-b{color:var(--bl);}.c-y{color:var(--yl);}.c-r{color:var(--rd);}.c-p{color:var(--pu);}
+</style>
+</head>
+<body>
+ 
+<!-- HEADER -->
+<div class="hdr">
+  <h1>⚔️ MICRO SNIPER PRO</h1>
+  <p>Fixed Ratio | Stack 50% | Streak | Level 1–100 | XAUUSDm</p>
+  <div class="hdr-inp">
+    <div class="ig"><label>💰 Equity ($)</label><input type="number" id="iEq" value="20" min="1" step="0.01"></div>
+    <div class="ig"><label>🏦 Stack ($)</label><input type="number" id="iSt" value="0" min="0" step="0.01"></div>
+    <button class="bst" onclick="applyEq()">▶ เริ่ม</button>
+  </div>
+</div>
+ 
+<div class="content">
+ 
+  <!-- PORTFOLIO -->
+  <div class="card">
+    <div class="ct">📊 สถานะพอร์ต</div>
+    <div class="slb">Trading Equity</div>
+    <div class="bnum" id="eqD">$20.00</div>
+    <div style="margin:12px 0 4px;"><div class="slb">Lot Size</div><div class="mnum" id="lotD">0.01</div></div>
+    <div style="font-size:14px;color:var(--yl);font-weight:700;margin-bottom:6px;" id="lvD">Level 1 / 100</div>
+    <div class="pb"><div class="pf pg" id="pBar" style="width:0%"></div></div>
+    <div style="font-size:11px;color:var(--tx2);margin-bottom:12px;" id="pLbl">ต้องการอีก $10</div>
+    <div class="sr"><span class="sl">Total Balance</span><span class="sv c-b" id="totBal">$20.00</span></div>
+    <div class="sr"><span class="sl">Pip Value</span><span class="sv c-b" id="pipV">$0.010</span></div>
+    <div class="sr"><span class="sl">Max Risk/Trade</span><span class="sv c-r" id="riskV">$0.40</span></div>
+    <div class="al al-d" id="aD">⚠️ LEVEL DOWN!</div>
+    <div class="al al-r" id="aR">🔄 DROP 2+! Reset ค่าผ่านทาน</div>
+    <div class="al al-ok" id="aSave">💾 บันทึกข้อมูลตั้งค่าสำเร็จ!</div>
+  </div>
+ 
+  <!-- STACK + STREAK -->
+  <div class="g2">
+    <div class="card">
+      <div class="ct">🏦 Stack</div>
+      <div class="slb">Stack (ห้ามแตะ)</div>
+      <div style="font-size:28px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--yl);" id="stD">$0.00</div>
+      <div class="pb"><div class="pf py" id="stBar" style="width:0%"></div></div>
+      <div style="font-size:11px;color:var(--tx2);margin-bottom:10px;" id="stLbl">เหลือ $300</div>
+      <div class="sr"><span class="sl">เป้าหมาย</span><span class="sv c-y">$300</span></div>
+      <div class="sr"><span class="sl">Stack ถัดไป</span><span class="sv c-y" id="nxSt">$5</span></div>
+      <div class="sr"><span class="sl">สถานะ</span><span class="sv" id="stStat"><span class="c-y">สะสม</span></span></div>
+      <div class="al al-s" id="aS">💰 Stack!</div>
+      <div class="al al-ok" id="aOk">🎉 ครบ $300!</div>
+    </div>
+    <div class="card">
+      <div class="ct">🔥 Streak</div>
+      <div class="slb">แพ้ติดกัน</div>
+      <div class="dots"><div class="dot" id="d0"></div><div class="dot" id="d1"></div><div class="dot" id="d2"></div></div>
+      <div style="font-size:13px;font-weight:700;margin-bottom:10px;" id="skMsg">ยังไม่แพ้</div>
+      <div class="sr"><span class="sl">แพ้ติดกัน</span><span class="sv c-r" id="skCnt">0 ไม้</span></div>
+      <div class="sr"><span class="sl">กฎ</span><span class="sv c-p" style="font-size:11px;">3→พัก 1ชม.</span></div>
+      <div class="sr"><span class="sl">Reset</span><span class="sv c-g">WIN 1ครั้ง</span></div>
+      <div class="al al-sk" id="aSk">😤 พัก 1 ชม.!</div>
+    </div>
+  </div>
+ 
+  <!-- STATS -->
+  <div class="stats">
+    <div class="sb"><div class="lbl">Trades</div><div class="val c-b" id="sTr">0</div></div>
+    <div class="sb"><div class="lbl">Win Rate</div><div class="val c-g" id="sWR">-</div></div>
+    <div class="sb"><div class="lbl">Net PnL</div><div class="val" id="sPL">$0</div></div>
+    <div class="sb"><div class="lbl">Max DD</div><div class="val c-r" id="sDD">0%</div></div>
+    <div class="sb"><div class="lbl">Peak</div><div class="val c-g" id="sPk">$20</div></div>
+    <div class="sb"><div class="lbl">Wealth</div><div class="val c-b" id="sWl">$20</div></div>
+  </div>
+ 
+  <!-- CHART -->
+  <div class="card">
+    <div class="ct">📈 Equity Curve &nbsp;<span style="color:var(--gn);font-size:10px;">━ Equity</span> &nbsp;<span style="color:var(--yl);font-size:10px;">━ Wealth</span></div>
+    <canvas id="cv" height="180"></canvas>
+  </div>
+ 
+  <!-- TABLE / LOG -->
+  <div class="card">
+    <div class="tabs">
+      <div class="tab on" onclick="swTab('t')">📋 Lot Ladder</div>
+      <div class="tab" onclick="swTab('l')">📝 Trade Log</div>
+    </div>
+    <div class="tc on" id="tcT">
+      <div class="tw">
+        <table><thead><tr><th>Lv</th><th>Eq ($)</th><th>Lot</th><th>Delta</th><th>Stack</th><th></th></tr></thead>
+        <tbody id="tBody"></tbody></table>
+      </div>
+    </div>
+    <div class="tc" id="tcL">
+      <div class="logbox" id="logB"><div class="le sys">[INIT] Ready</div></div>
+    </div>
+  </div>
+ 
+</div>
+ 
+<!-- FIXED FOOTER -->
+<div class="footer">
+  <div class="fp"><label>Win (pips)</label><input type="number" id="wP" value="80" min="1"></div>
+  <div class="fp"><label>Loss (pips)</label><input type="number" id="lP" value="40" min="1"></div>
+  <div class="tbtns">
+    <button class="tb tbw" onclick="trade('win')">✅ WIN</button>
+    <button class="tb tbl" onclick="trade('loss')">❌ LOSS</button>
+  </div>
+  <button class="tbr" onclick="saveSetupClick()" style="color:var(--bl);border-color:var(--bl);" title="บันทึกการตั้งค่า">💾</button>
+  <button class="tbr" onclick="resetAll()" title="รีเซ็ตทั้งหมด">🔄</button>
+</div>
+ 
+<script>
+const D=10,IE=20,ST=300,R=.5,ML=100;
+function gLvs(){const l=[];let e=IE;for(let n=1;n<=ML;n++){const lot=+(n*.01).toFixed(2),d=n*D,s=d*R,nx=e+d;l.push({n,e,lot,d,s,nx});e=nx;}return l;}
+const LV=gLvs();
+let S={eq:IE,st:0,w:0,l:0,pk:IE,dd:0,hE:[IE],hW:[IE],col:new Set(),sk:0,iE:IE};
+ 
+function gi(e){let i=0;for(let j=LV.length-1;j>=0;j--){if(e>=LV[j].e){i=j;break;}}return i;}
+function pv(lot){return lot*100*.01;}
+ 
+function applyEq(){
+  const e=parseFloat(document.getElementById('iEq').value)||IE;
+  const st=parseFloat(document.getElementById('iSt').value)||0;
+  S={eq:e,st,w:0,l:0,pk:e,dd:0,hE:[e],hW:[e+st],col:new Set(),sk:0,iE:e};
+  document.getElementById('logB').innerHTML=`<div class="le sys">[START] Eq:$${e.toFixed(2)} St:$${st.toFixed(2)} Lv:${gi(e)+1}</div>`;
+  clrA();ui();ch();tb();
+  saveState();
+}
+ 
+function trade(type){
+  const wp=parseFloat(document.getElementById('wP').value)||80;
+  const lp=parseFloat(document.getElementById('lP').value)||40;
+  const pi=gi(S.eq),lot=LV[pi].lot,p=pv(lot);
+  const pnl=type==='win'?wp*p:-(lp*p);
+  S.eq=Math.max(.01,S.eq+pnl);
+  type==='win'?(S.w++,S.sk=0):(S.l++,S.sk++);
+  const t=S.w+S.l,ni=gi(S.eq);
+  if(S.sk>=3){shA('sk');lg(`[😤] แพ้ ${S.sk} ไม้! พัก 1 ชม.`,'warn',t);}
+  if(ni>pi){
+    for(let i=pi;i<ni;i++){
+      if(!S.col.has(i)&&S.st<ST){
+        const a=Math.min(LV[i].s,ST-S.st);
+        S.eq=Math.max(.01,S.eq-a);S.st+=a;S.col.add(i);
+        lg(`[💰 STACK] L${i+1}→L${i+2} $${a.toFixed(0)} รวม $${S.st.toFixed(0)}`,'stack',t);
+        shA(S.st>=ST?'ok':'s');
+      }else if(S.col.has(i))lg(`[⚡ฟรี] L${i+1}`,'sys',t);
+    }
+    lg(`[↑UP] L${pi+1}→L${gi(S.eq)+1} Lot:${LV[gi(S.eq)].lot.toFixed(2)}`,'sys',t);
+  }else if(ni<pi){
+    const dr=pi-ni;
+    if(dr>=2){let rl=[];for(let i=ni;i<pi;i++){if(S.col.has(i)&&S.st<ST){S.col.delete(i);rl.push(`L${i+1}`);}}
+      rl.length?(lg(`[🔄RESET] Drop${dr} ${rl.join(',')}`,'warn',t),shA('r')):shA('d');
+    }else shA('d');
+    lg(`[↓DOWN] L${pi+1}→L${ni+1}`,'sys',t);
+  }
+  lg(type==='win'?`WIN +${wp}p +$${pnl.toFixed(2)} ${lot.toFixed(2)}lot`:`LOSS -${lp}p -$${Math.abs(pnl).toFixed(2)} ${lot.toFixed(2)}lot`,type==='win'?'win':'loss',t);
+  S.pk=Math.max(S.pk,S.eq);S.dd=Math.max(S.dd,((S.pk-S.eq)/S.pk)*100);
+  S.hE.push(S.eq);S.hW.push(S.eq+S.st);
+  if(S.hE.length>200){S.hE.shift();S.hW.shift();}
+  ui();ch();tb();
+  saveState();
+}
+ 
+function shA(t){clrA();const m={d:'aD',r:'aR',s:'aS',ok:'aOk',sk:'aSk',save:'aSave'};const e=document.getElementById(m[t]);if(e){e.style.display='block';if(t!=='ok'&&t!=='save')setTimeout(()=>e.style.display='none',3500);else if(t==='save')setTimeout(()=>e.style.display='none',2000);}}
+function clrA(){['aD','aR','aS','aOk','aSk','aSave'].forEach(id=>{const e=document.getElementById(id);if(e)e.style.display='none';});}
+function lg(msg,cls,n){const b=document.getElementById('logB');const d=document.createElement('div');d.className=`le ${cls}`;d.textContent=`[#${n}] ${msg} $${S.eq.toFixed(2)}`;b.insertBefore(d,b.firstChild);}
+function resetAll(){
+  const e=parseFloat(document.getElementById('iEq').value)||IE;
+  S={eq:e,st:0,w:0,l:0,pk:e,dd:0,hE:[e],hW:[e],col:new Set(),sk:0,iE:e};
+  document.getElementById('logB').innerHTML='<div class="le sys">[RESET]</div>';
+  clrA();ui();ch();tb();
+  saveState();
+}
+function swTab(t){document.querySelectorAll('.tab').forEach((e,i)=>e.className='tab'+(i===(t==='t'?0:1)?' on':''));document.getElementById('tcT').className='tc'+(t==='t'?' on':'');document.getElementById('tcL').className='tc'+(t==='l'?' on':'');}
+ 
+function ui(){
+  const idx=gi(S.eq),lv=LV[idx],nlv=LV[idx+1];
+  const t=S.w+S.l,wr=t>0?((S.w/t)*100).toFixed(1)+'%':'-';
+  const pnl=S.eq-S.iE,lot=lv.lot,p=pv(lot),tot=S.eq+S.st,done=S.st>=ST;
+  document.getElementById('eqD').textContent=`$${S.eq.toFixed(2)}`;
+  document.getElementById('eqD').className='bnum'+(S.eq<S.iE?' rd':'');
+  document.getElementById('lotD').textContent=lot.toFixed(2);
+  document.getElementById('lvD').textContent=`Level ${idx+1} / 100`;
+  document.getElementById('totBal').textContent=`$${tot.toFixed(2)}`;
+  document.getElementById('pipV').textContent=`$${p.toFixed(3)}`;
+  document.getElementById('riskV').textContent=`$${(40*p).toFixed(2)}`;
+  if(nlv){const pg=Math.max(0,Math.min(100,((S.eq-lv.e)/(nlv.e-lv.e))*100));document.getElementById('pBar').style.width=pg+'%';document.getElementById('pLbl').textContent=`ต้องการอีก $${Math.max(0,nlv.e-S.eq).toFixed(2)} → Lv${idx+2}`;}
+  else{document.getElementById('pBar').style.width='100%';document.getElementById('pLbl').textContent='🏆 MAX Level 100!';}
+  document.getElementById('stD').textContent=`$${S.st.toFixed(2)}`;
+  document.getElementById('stBar').style.width=Math.min(100,(S.st/ST)*100)+'%';
+  document.getElementById('stLbl').textContent=done?'✅ ครบ $300!':`เหลือ $${(ST-S.st).toFixed(0)}`;
+  document.getElementById('nxSt').textContent=done?'หยุด':`$${lv.s.toFixed(0)}`;
+  document.getElementById('stStat').innerHTML=done?'<span class="c-g">✅เต็มที่</span>':'<span class="c-y">สะสม</span>';
+  for(let i=0;i<3;i++){const d=document.getElementById(`d${i}`);d.className='dot'+(S.sk>i?' loss':S.sk===i&&i>0?' warn':'');}
+  document.getElementById('skMsg').textContent=S.sk===0?'ยังไม่แพ้':S.sk>=3?'⚠️ พักได้แล้ว!':S.sk===2?'⚠️ อีก 1 ไม้!':'แพ้ 1 ไม้';
+  document.getElementById('skCnt').textContent=`${S.sk} ไม้`;
+  document.getElementById('sTr').textContent=t;
+  document.getElementById('sWR').textContent=wr;
+  document.getElementById('sPL').innerHTML=`<span style="color:${pnl>=0?'var(--gn)':'var(--rd)'}">$${pnl>=0?'+':''}${pnl.toFixed(2)}</span>`;
+  document.getElementById('sDD').textContent=`${S.dd.toFixed(1)}%`;
+  document.getElementById('sPk').textContent=`$${S.pk.toFixed(2)}`;
+  document.getElementById('sWl').textContent=`$${tot.toFixed(2)}`;
+}
+ 
+function tb(){
+  const b=document.getElementById('tBody');b.innerHTML='';
+  const ci=gi(S.eq),done=S.st>=ST;
+  const tc=['#58a6ff','#3fb950','#d29922','#bc8cff','#f85149'];
+  LV.forEach((lv,i)=>{
+    const tr=document.createElement('tr');
+    const iC=i===ci,iB=i<ci,iCo=S.col.has(i);
+    tr.className=iC?'cur':iB?'blw':'';
+    const ti=i<10?0:i<30?1:i<60?2:i<85?3:4;
+    let st=`<span style="color:var(--tx3)">—</span>`;
+    if(iC)st='<span style="color:var(--yl)">▶</span>';
+    else if(iCo)st='<span style="color:var(--gn)">✅</span>';
+    else if(iB)st='<span style="color:var(--or)">🔄</span>';
+    tr.innerHTML=`<td><span class="lvb" style="background:${tc[ti]}20;color:${tc[ti]}">${lv.n}</span></td><td>$${lv.e.toFixed(0)}</td><td style="color:var(--bl)">${lv.lot.toFixed(2)}</td><td style="color:var(--yl)">$${lv.d}</td><td style="color:var(--gn)">${done?'—':'$'+lv.s.toFixed(0)}</td><td>${st}</td>`;
+    b.appendChild(tr);
+  });
+}
+ 
+function ch(){
+  const cv=document.getElementById('cv');
+  const W=cv.parentElement.clientWidth-28,H=180;
+  cv.width=W;cv.height=H;
+  const ctx=cv.getContext('2d');
+  const eq=S.hE,wl=S.hW;
+  if(eq.length<2)return;
+  ctx.clearRect(0,0,W,H);
+  const all=[...eq,...wl],mn=Math.min(...all)*.97,mx=Math.max(...all)*1.03,rng=mx-mn||1;
+  const pad={l:50,r:10,t:8,b:8},cW=W-pad.l-pad.r,cH=H-pad.t-pad.b;
+  const tx=i=>pad.l+(i/(eq.length-1))*cW,ty=v=>pad.t+cH-((v-mn)/rng)*cH;
+  ctx.strokeStyle='#21262d';ctx.lineWidth=1;
+  for(let i=0;i<=4;i++){const y=pad.t+(i/4)*cH;ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(W-pad.r,y);ctx.stroke();ctx.fillStyle='#6e7681';ctx.font='11px monospace';ctx.fillText(`$${(mx-(i/4)*(mx-mn)).toFixed(0)}`,2,y+4);}
+  ctx.strokeStyle='#30363d';ctx.setLineDash([3,3]);ctx.beginPath();ctx.moveTo(pad.l,ty(S.iE));ctx.lineTo(W-pad.r,ty(S.iE));ctx.stroke();ctx.setLineDash([]);
+  ctx.strokeStyle='#d29922';ctx.lineWidth=2;ctx.beginPath();wl.forEach((v,i)=>i===0?ctx.moveTo(tx(i),ty(v)):ctx.lineTo(tx(i),ty(v)));ctx.stroke();
+  const g=ctx.createLinearGradient(0,pad.t,0,H-pad.b);g.addColorStop(0,'rgba(63,185,80,.25)');g.addColorStop(1,'rgba(63,185,80,0)');
+  ctx.beginPath();ctx.moveTo(tx(0),ty(eq[0]));eq.forEach((v,i)=>ctx.lineTo(tx(i),ty(v)));ctx.lineTo(tx(eq.length-1),H-pad.b);ctx.lineTo(pad.l,H-pad.b);ctx.closePath();ctx.fillStyle=g;ctx.fill();
+  ctx.strokeStyle='#3fb950';ctx.lineWidth=2.5;ctx.beginPath();eq.forEach((v,i)=>i===0?ctx.moveTo(tx(i),ty(v)):ctx.lineTo(tx(i),ty(v)));ctx.stroke();
+  ctx.fillStyle='#3fb950';ctx.beginPath();ctx.arc(tx(eq.length-1),ty(eq[eq.length-1]),5,0,Math.PI*2);ctx.fill();
+}
+ 
+function saveState() {
+  const stateToSave = {
+    eq: S.eq,
+    st: S.st,
+    w: S.w,
+    l: S.l,
+    pk: S.pk,
+    dd: S.dd,
+    hE: S.hE,
+    hW: S.hW,
+    col: Array.from(S.col),
+    sk: S.sk,
+    iE: S.iE,
+    wP: parseFloat(document.getElementById('wP').value) || 80,
+    lP: parseFloat(document.getElementById('lP').value) || 40,
+    iEq: parseFloat(document.getElementById('iEq').value) || 20,
+    iSt: parseFloat(document.getElementById('iSt').value) || 0,
+    logsHtml: document.getElementById('logB').innerHTML
+  };
+  localStorage.setItem('micro_sniper_pro_state', JSON.stringify(stateToSave));
+}
+
+function loadState() {
+  const saved = localStorage.getItem('micro_sniper_pro_state');
+  if (saved) {
+    try {
+      const data = JSON.parse(saved);
+      S.eq = data.eq;
+      S.st = data.st;
+      S.w = data.w;
+      S.l = data.l;
+      S.pk = data.pk;
+      S.dd = data.dd;
+      S.hE = data.hE || [data.eq];
+      S.hW = data.hW || [data.eq + data.st];
+      S.col = new Set(data.col || []);
+      S.sk = data.sk;
+      S.iE = data.iE;
+      
+      document.getElementById('wP').value = data.wP;
+      document.getElementById('lP').value = data.lP;
+      document.getElementById('iEq').value = data.iEq;
+      document.getElementById('iSt').value = data.iSt;
+      
+      if (data.logsHtml) {
+        document.getElementById('logB').innerHTML = data.logsHtml;
+      }
+      
+      ui();
+      ch();
+      tb();
+      return true;
+    } catch (e) {
+      console.error('Error loading saved state:', e);
+    }
+  }
+  return false;
+}
+
+function saveSetupClick() {
+  saveState();
+  shA('save');
+}
+
+const loaded = loadState();
+if (!loaded) {
+  applyEq();
+}
+window.addEventListener('resize',ch);
+</script>
+</body>
+</html>
