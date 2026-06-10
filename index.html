@@ -142,18 +142,18 @@ tbody tr.blw td{color:var(--tx3);}
 .dm-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-top: 10px;
+  gap: 12px;
+  margin-top: 12px;
 }
 .dmb {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 14px 8px;
-  border-radius: 8px;
+  padding: 16px 12px;
+  border-radius: 12px;
   border: 1px solid var(--bdr);
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 700;
   cursor: pointer;
   background: var(--bg4);
@@ -161,7 +161,7 @@ tbody tr.blw td{color:var(--tx3);}
   transition: all 0.1s;
 }
 .dmb:active {
-  transform: scale(0.96);
+  transform: scale(0.95);
 }
 .dmb-save {
   border-color: var(--bl);
@@ -199,6 +199,10 @@ tbody tr.blw td{color:var(--tx3);}
 }
 
 @media print {
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
   .print-header {
     display: flex !important;
     justify-content: space-between;
@@ -228,6 +232,25 @@ tbody tr.blw td{color:var(--tx3);}
     height: auto !important;
     max-height: none !important;
     overflow: visible !important;
+  }
+  /* Ensure colors for win/loss are visible in PDF */
+  .le.win {
+    color: #3fb950 !important;
+    font-weight: 700 !important;
+  }
+  .le.loss {
+    color: #f85149 !important;
+    font-weight: 700 !important;
+  }
+  .le.sys {
+    color: #58a6ff !important;
+  }
+  .le.stack {
+    color: #d29922 !important;
+  }
+  .le.warn {
+    color: #f0883e !important;
+    font-weight: 700 !important;
   }
 }
 
@@ -468,8 +491,6 @@ tbody tr.blw td{color:var(--tx3);}
     <button class="tb tbw" onclick="trade('win')">✅ WIN</button>
     <button class="tb tbl" onclick="trade('loss')">❌ LOSS</button>
   </div>
-  <button class="tbr" onclick="saveSetupClick()" style="color:var(--bl);border-color:var(--bl);" title="บันทึกการตั้งค่า">💾</button>
-  <button class="tbr" onclick="resetAll()" title="รีเซ็ตทั้งหมด">🔄</button>
 </div>
  
 <script>
@@ -521,7 +542,11 @@ function trade(type){
     }else shA('d');
     lg(`[↓DOWN] L${pi+1}→L${ni+1}`,'sys',t);
   }
-  lg(type==='win'?`WIN +${wp}p +$${pnl.toFixed(2)} ${lot.toFixed(2)}lot`:`LOSS -${lp}p -$${Math.abs(pnl).toFixed(2)} ${lot.toFixed(2)}lot`,type==='win'?'win':'loss',t);
+  let lossNote = '';
+  if (type === 'loss' && S.sk >= 3) {
+    lossNote = ` (ขาดทุนติดต่อกัน ${S.sk} ไม้)`;
+  }
+  lg(type==='win'?`WIN +${wp}p +$${pnl.toFixed(2)} ${lot.toFixed(2)}lot`:`LOSS -${lp}p -$${Math.abs(pnl).toFixed(2)} ${lot.toFixed(2)}lot${lossNote}`,type==='win'?'win':'loss',t);
   S.pk=Math.max(S.pk,S.eq);S.dd=Math.max(S.dd,((S.pk-S.eq)/S.pk)*100);
   S.hE.push(S.eq);S.hW.push(S.eq+S.st);
   if(S.hE.length>200){S.hE.shift();S.hW.shift();}
