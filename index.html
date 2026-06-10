@@ -194,7 +194,20 @@ tbody tr.blw td{color:var(--tx3);}
   background: var(--rd3);
 }
 
+.print-header {
+  display: none;
+}
+
 @media print {
+  .print-header {
+    display: flex !important;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #30363d;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    color: #e6edf3;
+  }
   .hdr-inp, .footer, .card-data-mgmt {
     display: none !important;
   }
@@ -335,7 +348,13 @@ tbody tr.blw td{color:var(--tx3);}
 </style>
 </head>
 <body>
- 
+
+<!-- PRINT HEADER -->
+<div class="print-header">
+  <span style="font-weight:700;font-size:18px;">รายงานการเทรด - kesinnee Trader to 100K</span>
+  <span id="printDate" style="font-size:12px;color:#666;font-family:'JetBrains Mono',monospace;"></span>
+</div>
+  
 <!-- HEADER -->
 <div class="hdr">
   <h1>⚔️ kesinnee Trader to 100K</h1>
@@ -428,6 +447,7 @@ tbody tr.blw td{color:var(--tx3);}
   <!-- DATA MANAGEMENT -->
   <div class="card card-data-mgmt">
     <div class="ct">🛠️ จัดการข้อมูล & รายงาน</div>
+    <div id="lastSavedD" style="font-size:11px;color:var(--tx3);margin-bottom:8px;font-family:'JetBrains Mono',monospace;">บันทึกข้อมูลล่าสุด: —</div>
     <div class="dm-grid">
       <button class="dmb dmb-save" onclick="saveSetupClick()">💾 บันทึกข้อมูลพอร์ต</button>
       <button class="dmb dmb-export-img" onclick="exportReportImage()">🖼️ ส่งออกเป็นรูปภาพ</button>
@@ -461,11 +481,16 @@ let S={eq:IE,st:0,w:0,l:0,pk:IE,dd:0,hE:[IE],hW:[IE],col:new Set(),sk:0,iE:IE};
 function gi(e){let i=0;for(let j=LV.length-1;j>=0;j--){if(e>=LV[j].e){i=j;break;}}return i;}
 function pv(lot){return lot*100*.01;}
  
+function getTimestamp() {
+  const now = new Date();
+  return now.toTimeString().split(' ')[0];
+}
+
 function applyEq(){
   const e=parseFloat(document.getElementById('iEq').value)||IE;
   const st=parseFloat(document.getElementById('iSt').value)||0;
   S={eq:e,st,w:0,l:0,pk:e,dd:0,hE:[e],hW:[e+st],col:new Set(),sk:0,iE:e};
-  document.getElementById('logB').innerHTML=`<div class="le sys">[START] Eq:$${e.toFixed(2)} St:$${st.toFixed(2)} Lv:${gi(e)+1}</div>`;
+  document.getElementById('logB').innerHTML=`<div class="le sys">[${getTimestamp()}] [START] Eq:$${e.toFixed(2)} St:$${st.toFixed(2)} Lv:${gi(e)+1}</div>`;
   clrA();ui();ch();tb();
   saveState();
 }
@@ -506,11 +531,11 @@ function trade(type){
  
 function shA(t){clrA();const m={d:'aD',r:'aR',s:'aS',ok:'aOk',sk:'aSk',save:'aSave'};const e=document.getElementById(m[t]);if(e){e.style.display='block';if(t!=='ok'&&t!=='save')setTimeout(()=>e.style.display='none',3500);else if(t==='save')setTimeout(()=>e.style.display='none',2000);}}
 function clrA(){['aD','aR','aS','aOk','aSk','aSave'].forEach(id=>{const e=document.getElementById(id);if(e)e.style.display='none';});}
-function lg(msg,cls,n){const b=document.getElementById('logB');const d=document.createElement('div');d.className=`le ${cls}`;d.textContent=`[#${n}] ${msg} $${S.eq.toFixed(2)}`;b.insertBefore(d,b.firstChild);}
+function lg(msg,cls,n){const b=document.getElementById('logB');const d=document.createElement('div');d.className=`le ${cls}`;d.textContent=`[#${n}] [${getTimestamp()}] ${msg} $${S.eq.toFixed(2)}`;b.insertBefore(d,b.firstChild);}
 function resetAll(){
   const e=parseFloat(document.getElementById('iEq').value)||IE;
   S={eq:e,st:0,w:0,l:0,pk:e,dd:0,hE:[e],hW:[e],col:new Set(),sk:0,iE:e};
-  document.getElementById('logB').innerHTML='<div class="le sys">[RESET]</div>';
+  document.getElementById('logB').innerHTML=`<div class="le sys">[${getTimestamp()}] [RESET]</div>`;
   clrA();ui();ch();tb();
   saveState();
 }
@@ -586,6 +611,11 @@ function ch(){
 }
  
 function saveState() {
+  const now = new Date();
+  const timeStr = now.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  const dateStr = now.toLocaleDateString('th-TH', { day: '2-digit', month: 'short', year: 'numeric' });
+  const lastSavedText = `บันทึกข้อมูลล่าสุด: ${dateStr} ${timeStr}`;
+  
   const stateToSave = {
     eq: S.eq,
     st: S.st,
@@ -602,9 +632,14 @@ function saveState() {
     lP: parseFloat(document.getElementById('lP').value) || 40,
     iEq: parseFloat(document.getElementById('iEq').value) || 20,
     iSt: parseFloat(document.getElementById('iSt').value) || 0,
-    logsHtml: document.getElementById('logB').innerHTML
+    logsHtml: document.getElementById('logB').innerHTML,
+    lastSaved: lastSavedText
   };
   localStorage.setItem('micro_sniper_pro_state', JSON.stringify(stateToSave));
+  localStorage.setItem('micro_sniper_pro_last_saved', lastSavedText);
+  
+  const el = document.getElementById('lastSavedD');
+  if (el) el.textContent = lastSavedText;
 }
 
 function loadState() {
@@ -631,6 +666,11 @@ function loadState() {
       
       if (data.logsHtml) {
         document.getElementById('logB').innerHTML = data.logsHtml;
+      }
+      
+      const el = document.getElementById('lastSavedD');
+      if (el) {
+        el.textContent = data.lastSaved || 'บันทึกข้อมูลล่าสุด: —';
       }
       
       ui();
@@ -716,9 +756,20 @@ function importBackupJSON() {
   input.click();
 }
 
+window.addEventListener('beforeprint', () => {
+  const now = new Date();
+  const timeStr = now.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  const dateStr = now.toLocaleDateString('th-TH', { day: '2-digit', month: 'short', year: 'numeric' });
+  document.getElementById('printDate').textContent = `สร้างเมื่อ: ${dateStr} ${timeStr}`;
+});
+
 const loaded = loadState();
 if (!loaded) {
   applyEq();
+} else {
+  const lastSaved = localStorage.getItem('micro_sniper_pro_last_saved');
+  const el = document.getElementById('lastSavedD');
+  if (lastSaved && el) el.textContent = lastSaved;
 }
 window.addEventListener('resize',ch);
 </script>
